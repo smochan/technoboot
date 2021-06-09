@@ -33,11 +33,11 @@ async function update(req, res) {
     });
     if (data) {
       if (req.body.imageUrl) data.imageUrl = req.body.imageUrl;
-      if (res.body.title) data.title = req.body.title;
+      if (req.body.title) data.title = req.body.title;
 
-      if (res.body.content) data.content = req.body.content;
+      if (req.body.content) data.content = req.body.content;
 
-      if (res.body.heading) data.heading = req.body.heading;
+      if (req.body.heading) data.heading = req.body.heading;
 
       await data.save();
       return res.status(200).send("data updated");
@@ -50,10 +50,14 @@ async function update(req, res) {
 }
 
 async function del(req, res) {
+    if(!req.body.id){
+        return res.status(400).send("Bad request");
+    }
   try {
     const data = await Data.deleteOne({
       _id: req.body.id,
     });
+    return res.status(200).send("data deleted");
   } catch (err) {
     res.status(500).send("Error!");
   }
